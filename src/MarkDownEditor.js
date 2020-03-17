@@ -1,41 +1,29 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import marked from "marked";
 import highlight from 'highlightjs';
-import 'highlightjs/styles/docco.css'
+import 'highlightjs/styles/docco.css';
 
-const markrender = new marked.Renderer();
+// delete file name
 marked.setOptions({
     highlight: function (code, lang) {
         return highlight.highlightAuto(code, [lang.split(':')[0]]).value;
     }
 });
 
-class MarkDownEditor extends Component{
+const MarkDownEditor = () => {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            data: ''
-        }
-    }
-    handleChange = (e) => {
-        this.setState({
-            data: e
-        })
-    }
+    const [markdown, setMarkdown] = useState('');
 
-    render(){
-        return(
-            <form>
-            <SimpleMDE id='data' onChange={this.handleChange}/>
+    return(
+        <div>
+            <SimpleMDE onChange={(e) => setMarkdown(e)}/>
             <div id="body" >
-                <span dangerouslySetInnerHTML={{ __html: marked(this.state.data, { renderer: markrender })}}/>
+                <span dangerouslySetInnerHTML={{ __html: marked(markdown)}}/>
             </div>
-            </form>
-        )
-    }
+        </div>
+        
+    )
 }
-
-export default MarkDownEditor
+export default MarkDownEditor;
